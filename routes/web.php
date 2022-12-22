@@ -15,11 +15,16 @@ use App\Http\Controllers\ClientesController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 
-Route::resource('clientes',ClientesController::class);
-Auth::routes();
+Route::resource('clientes',ClientesController::class)->middleware('auth');
+Auth::routes(['register'=> false,'reset'=>false]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [ClientesController::class, 'index'])->name('home');
+
+Route::group(['middleware' => 'auth'], function(){
+
+    Route::get('/', [ClientesController::class, 'index'])->name('home');
+}); 

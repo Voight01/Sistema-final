@@ -1,5 +1,21 @@
 
+@extends('layouts.app')
+@section('content')
+<div class="container">
+
 Mostrar listas de clientes
+<br>
+
+<div class="alert alert-success alert-dismissible" role="alert">
+    @if(Session::has('mensaje'))
+    {{Session::get('mensaje')}}
+
+    @endif
+
+</div>
+
+
+<a href="{{ url('clientes/create') }}" class="btn btn-success">Registrar nuevo cliente</a>
 <table class="table table-light">
 
     <thead class="thead-light">
@@ -28,7 +44,7 @@ Mostrar listas de clientes
             <td>{{$clientes->Compañia}}</td>
             <td>
             
-            <a href="{{ url('/clientes/'.$clientes->id.'/edit') }}">
+            <a href="{{ url('/clientes/'.$clientes->id.'/edit') }}" class="btn btn-warning">
             
             Editar
             
@@ -36,10 +52,10 @@ Mostrar listas de clientes
 
              | 
 
-            <form action="{{ url('/clientes/'.$clientes->id ) }}" method="post">
+            <form action="{{ url('/clientes/'.$clientes->id ) }}" class="d-inline" method="post">
                 @csrf 
                 {{ method_field('DELETE') }}
-                <input type="submit" onclick="return confirm('¿Quieres borrar?')" value="Borrar">
+                <input class="btn btn-danger" type="submit" onclick="return confirm('¿Quieres borrar?')" value="Borrar">
 
             </form>
 
@@ -50,3 +66,5 @@ Mostrar listas de clientes
     </tbody>
 
 </table>
+</div>
+@endsection

@@ -1,3 +1,16 @@
-formulario de edicion de cliente 
+@extends('layouts.app')
+@section('content')
+<div class="container">
 
-@include('Clientes.form');
+<form action="{{ url('/clientes/'.$cliente->id ) }}" method="post">
+@csrf 
+{{ method_field('PATCH') }}
+
+@include('Clientes.form',['modo'=>'Editar']);
+
+</form>
+</div>
+@endsection
+
+
+

@@ -37,9 +37,29 @@ class ClientesController extends Controller
      */
     public function store(Request $request)
     {
+
+        $campos=[
+            'Nombre'=>'required|string|max:100',
+            'Apellido'=>'required|string|max:100',
+            'Cedula'=>'required|string|max:100',
+            'Correo_electronico'=>'required|email',
+            'Tipo_Poliza'=>'required|string|max:100',
+            'Fecha_vigencia'=>'required|string|max:100',
+            'Compañia'=>'required|string|max:100'
+        ];
+
+        $mensaje=[
+
+            'required'=>'El :attribute es requerido'
+
+        ];
+
+        $this->validate($request, $campos,$mensaje);
+
         $datosCliente = request()->except('_token');
         Clientes::insert($datosCliente);
-        return response()->json($datosCliente);
+        //return response()->json($datosCliente);
+        return redirect('clientes')->with('mensaje','Cliente agregado con éxito');
     }
 
     /**
@@ -59,9 +79,11 @@ class ClientesController extends Controller
      * @param  \App\Models\Clientes  $clientes
      * @return \Illuminate\Http\Response
      */
-    public function edit(Clientes $clientes)
+    public function edit($id)
     {
-        return view('clientes.edit');
+        $cliente = Clientes::findOrFail($id);
+
+        return view('clientes.edit',compact('cliente'));
     }
 
     /**
@@ -71,9 +93,36 @@ class ClientesController extends Controller
      * @param  \App\Models\Clientes  $clientes
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Clientes $clientes)
+    public function update(Request $request, $id)
     {
         //
+        
+        $campos=[
+            'Nombre'=>'required|string|max:100',
+            'Apellido'=>'required|string|max:100',
+            'Cedula'=>'required|string|max:100',
+            'Correo_electronico'=>'required|email',
+            'Tipo_poliza'=>'required|string|max:100',
+            'Fecha_vigencia'=>'required|string|max:100',
+            'Compañia'=>'required|string|max:100'
+        ];
+
+        $mensaje=[
+
+            'required'=>'El :attribute es requerido',
+
+        ];
+
+        $this->validate($request, $campos,$mensaje);
+
+
+        $datosCliente = request()->except(['_token','_method']);
+        Clientes::where('id','=',$id)->update($datosCliente);
+
+        $cliente = Clientes::findOrFail($id);
+        //return view('clientes.edit', compact('cliente') );
+
+        return redirect('clientes')->with('mensaje','Cliente Modificado');
     }
 
     /**
@@ -86,6 +135,6 @@ class ClientesController extends Controller
     {
         //
         Clientes::destroy($id);
-        return redirect('clientes');
+        return redirect('clientes')->with('mensaje','Cliente Borrado :(');
     }
 }
